@@ -3,97 +3,117 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0c14">
 <meta name="description" content="ثلاث ألعاب عربية مجانية: الذاكرة، إكس-أو، خمّن الرقم">
 <title>ساحة الألعاب</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap">
 <style>
 html,body{margin:0}body{-webkit-text-size-adjust:100%}[hidden]{display:none!important}
-/* Layout: a single centered board with tabs above, styled like a tiled courtyard (tatreez cross-stitch motif in the header) */
 :root{
-  --bg:#f3f1ea; --surface:#fffdf7; --ink:#1f2a24; --muted:#5d6b62; --line:#d9d5c7;
-  --accent:#b3263a; --accent-ink:#fff; --olive:#4d6b3c; --tile:#e8e3d3;
-  --display:"Reem Kufi", "IBM Plex Sans Arabic", Tahoma, sans-serif;
-  --body:"IBM Plex Sans Arabic", Tahoma, "Segoe UI", sans-serif;
+  color-scheme:dark;
+  --bg:#0a0c14; --ink:#f4f5fb; --muted:#9097b5;
+  --glass:rgb(255 255 255/.05); --glass2:rgb(255 255 255/.09); --line:rgb(255 255 255/.12);
+  --a:#8b5cf6; --b:#06b6d4; --pink:#f472b6; --cyan:#22d3ee; --good:#34d399;
+  --grad:linear-gradient(135deg,var(--a),var(--b));
+  --font:"Cairo",Tahoma,"Segoe UI",sans-serif;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#141a16; --surface:#1c2420; --ink:#ece8dc; --muted:#a3ada5; --line:#2f3a33;
-  --accent:#e0566a; --accent-ink:#141a16; --olive:#8fb07a; --tile:#25302a; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#141a16; --surface:#1c2420; --ink:#ece8dc; --muted:#a3ada5; --line:#2f3a33;
-  --accent:#e0566a; --accent-ink:#141a16; --olive:#8fb07a; --tile:#25302a; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;padding-inline:16px;padding-block:24px 48px}
-.wrap{max-width:560px;margin-inline:auto;display:flex;flex-direction:column;gap:20px}
-header{display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center}
-.stitch{display:flex;gap:6px}
-.stitch span{width:10px;height:10px;background:
-  linear-gradient(45deg,transparent 42%,var(--accent) 42% 58%,transparent 58%),
-  linear-gradient(-45deg,transparent 42%,var(--accent) 42% 58%,transparent 58%)}
-.stitch span:nth-child(even){background:
-  linear-gradient(45deg,transparent 42%,var(--olive) 42% 58%,transparent 58%),
-  linear-gradient(-45deg,transparent 42%,var(--olive) 42% 58%,transparent 58%)}
-h1{font-family:var(--display);font-size:2.4rem;line-height:1.2;margin:0;text-wrap:balance}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.6;padding:28px 16px 20px;min-height:100vh;position:relative;overflow-x:hidden}
+/* soft colour blobs behind everything */
+body::before,body::after{content:"";position:fixed;z-index:-1;width:520px;height:520px;border-radius:50%;filter:blur(110px);opacity:.45;pointer-events:none}
+body::before{background:var(--a);top:-180px;right:-120px}
+body::after{background:var(--b);bottom:-200px;left:-140px;opacity:.35}
+.wrap{max-width:640px;margin-inline:auto;display:flex;flex-direction:column;gap:22px;min-height:calc(100vh - 48px)}
+main{display:flex;flex-direction:column;gap:18px;flex:1}
+
+header{text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;padding-top:8px}
+.badge{font-size:.8rem;font-weight:600;color:var(--cyan);background:rgb(34 211 238/.1);border:1px solid rgb(34 211 238/.25);padding:2px 12px;border-radius:999px}
+h1{font-size:clamp(2.6rem,11vw,3.8rem);font-weight:900;line-height:1.2;margin:4px 0 0;letter-spacing:-.5px;
+  background:linear-gradient(135deg,#fff 20%,#c4b5fd 60%,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
 header p{margin:0;color:var(--muted)}
-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--tile);padding:6px;border-radius:14px}
-nav button{font:inherit;font-weight:700;border:0;background:transparent;color:var(--muted);padding:10px 6px;border-radius:10px;cursor:pointer}
-nav button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0/.12)}
-button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-section{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:16px}
-h2{font-family:var(--display);font-size:1.5rem;margin:0}
-.bar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;color:var(--muted);font-variant-numeric:tabular-nums}
-.bar b{color:var(--ink)}
-.btn{font:inherit;font-weight:700;border:0;background:var(--accent);color:var(--accent-ink);padding:10px 18px;border-radius:999px;cursor:pointer}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.status{min-height:1.6em;font-weight:700;text-align:center}
-.status.win{color:var(--olive)}
+
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:5px;background:var(--glass);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+nav button{font:inherit;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;border:0;background:transparent;color:var(--muted);padding:11px 6px;border-radius:14px;cursor:pointer;transition:background .2s,color .2s}
+nav button:hover{color:var(--ink)}
+nav button[aria-selected="true"]{background:var(--grad);color:#fff;box-shadow:0 6px 22px rgb(139 92 246/.45)}
+@media (max-width:460px){nav button{flex-direction:column;gap:0;font-size:.85rem;padding:8px 2px}}
+button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+section{background:var(--glass);border:1px solid var(--line);border-radius:26px;padding:24px;display:flex;flex-direction:column;gap:18px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 20px 60px rgb(0 0 0/.35)}
+h2{font-size:1.5rem;font-weight:900;margin:0;line-height:1.3}
+.lead{margin:0;color:var(--muted)}
+.bar{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;font-variant-numeric:tabular-nums}
+.bar>span{display:flex;flex-direction:column;align-items:center;background:var(--glass);border:1px solid var(--line);padding:6px 8px;border-radius:14px;color:var(--muted);font-size:.8rem;line-height:1.4}
+.bar b{color:var(--ink);font-size:1.2rem;font-weight:700}
+.btn{font:inherit;font-weight:700;border:0;background:var(--grad);color:#fff;padding:12px 26px;border-radius:14px;cursor:pointer;align-self:center;min-width:170px;box-shadow:0 8px 24px rgb(6 182 212/.3);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgb(139 92 246/.45)}
+.btn.ghost{background:var(--glass);border:1px solid var(--line);box-shadow:none;color:var(--ink)}
+.status{min-height:1.7em;font-weight:700;text-align:center;color:var(--ink)}
+.status.win{color:var(--good)}
+
 /* Memory */
-.memory{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;perspective:600px}
-.card{aspect-ratio:1;max-width:100%;border:0;padding:0;background:none;cursor:pointer;position:relative;transform-style:preserve-3d;transition:transform .35s}
-.card .f,.card .b{position:absolute;inset:0;border-radius:12px;display:grid;place-items:center;backface-visibility:hidden}
-.card .b{background:var(--olive);background-image:repeating-linear-gradient(45deg,transparent 0 6px,rgb(255 255 255/.08) 6px 8px)}
-.card .f{background:var(--tile);transform:rotateY(180deg);font-family:var(--display);font-size:clamp(1.6rem,8vw,2.4rem);color:var(--ink)}
+.memory{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;perspective:800px;max-width:420px;width:100%;margin-inline:auto}
+.card{aspect-ratio:1;max-width:100%;border:0;padding:0;background:none;cursor:pointer;position:relative;transform-style:preserve-3d;transition:transform .4s}
+.card .f,.card .b{position:absolute;inset:0;border-radius:16px;display:grid;place-items:center;backface-visibility:hidden}
+.card .b{background:var(--glass2);border:1px solid var(--line)}
+.card .b::after{content:"";width:34%;aspect-ratio:1;border-radius:50%;background:var(--grad);opacity:.85;box-shadow:0 0 22px rgb(139 92 246/.6)}
+.card:hover .b{background:rgb(255 255 255/.14)}
+.card .f{background:rgb(139 92 246/.18);border:1px solid rgb(139 92 246/.5);transform:rotateY(180deg);font-size:clamp(1.8rem,9vw,2.6rem);font-weight:900;color:#fff}
 .card.open{transform:rotateY(180deg)}
-.card.done .f{background:var(--accent);color:var(--accent-ink)}
+.card.done .f{background:rgb(52 211 153/.18);border-color:rgb(52 211 153/.6);color:var(--good);box-shadow:0 0 24px rgb(52 211 153/.25)}
+
 /* XO */
-.xo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:340px;width:100%;margin-inline:auto}
-.cell{aspect-ratio:1;border:0;border-radius:14px;background:var(--tile);font-family:var(--display);font-size:3rem;color:var(--ink);cursor:pointer}
-.cell.x{color:var(--accent)} .cell.o{color:var(--olive)}
-.cell.hl{outline:3px solid var(--accent)}
-.seg{display:flex;gap:6px;flex-wrap:wrap}
-.seg button{font:inherit;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 14px;border-radius:999px;cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.xo{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:330px;width:100%;margin-inline:auto}
+.cell{aspect-ratio:1;border:1px solid var(--line);border-radius:20px;background:var(--glass);font:inherit;font-size:3.2rem;font-weight:900;color:var(--ink);cursor:pointer;transition:background .15s}
+.cell:hover{background:var(--glass2)}
+.cell.x{color:var(--cyan);text-shadow:0 0 20px rgb(34 211 238/.7)}
+.cell.o{color:var(--pink);text-shadow:0 0 20px rgb(244 114 182/.7)}
+.cell.hl{background:rgb(52 211 153/.18);border-color:var(--good)}
+.seg{display:flex;gap:4px;background:var(--glass);border:1px solid var(--line);padding:4px;border-radius:999px;align-self:flex-start}
+.seg button{font:inherit;font-size:.9rem;border:0;background:transparent;color:var(--muted);padding:5px 16px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--glass2);color:var(--ink);font-weight:700}
+
 /* Guess */
-.guess-row{display:flex;gap:8px}
-.guess-row input{flex:1;min-width:0;font:inherit;font-size:1.3rem;text-align:center;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums}
-.guess-row input:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
-.range{height:10px;border-radius:5px;background:var(--tile);position:relative;overflow:hidden}
-.range i{position:absolute;inset-block:0;background:var(--olive);transition:all .3s}
+.guess-row{display:flex;gap:10px}
+.guess-row input{flex:1;min-width:0;font:inherit;font-size:1.5rem;font-weight:700;text-align:center;padding:8px;border:1px solid var(--line);border-radius:14px;background:rgb(0 0 0/.3);color:var(--ink);font-variant-numeric:tabular-nums}
+.guess-row input::placeholder{font-size:1rem;font-weight:400;color:var(--muted)}
+.guess-row .btn{min-width:0}
+.range{height:10px;border-radius:5px;background:rgb(255 255 255/.08);position:relative;overflow:hidden}
+.range i{position:absolute;inset-block:0;background:var(--grad);border-radius:5px;transition:all .3s}
 .hist{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
-.hist li{padding:2px 10px;border-radius:999px;background:var(--tile);font-variant-numeric:tabular-nums;font-size:.9rem}
-footer{text-align:center;color:var(--muted);font-size:.85rem}
-@media (prefers-reduced-motion:reduce){.card,.range i{transition:none}}
+.hist li{padding:1px 12px;border-radius:999px;background:var(--glass2);border:1px solid var(--line);font-variant-numeric:tabular-nums;font-size:.9rem}
+
+footer{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding-top:6px}
+footer .credit{display:inline-flex;gap:6px;align-items:center;background:var(--glass);border:1px solid var(--line);padding:6px 18px;border-radius:999px;font-weight:600}
+footer .credit span{font-weight:900;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+footer small{color:var(--muted);font-size:.8rem}
+
+@media (max-width:520px){section{padding:18px;border-radius:22px}}
+@media (prefers-reduced-motion:reduce){.card,.range i,nav button,.btn{transition:none}}
 </style>
 </head>
 <body>
 
 <div class="wrap" dir="rtl" lang="ar">
   <header>
-    <div class="stitch" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <span class="badge">ألعاب مجانية</span>
     <h1>ساحة الألعاب</h1>
     <p>ثلاث ألعاب خفيفة، العب مباشرة من المتصفح</p>
   </header>
 
+  <main>
   <nav role="tablist" aria-label="الألعاب">
-    <button role="tab" id="tab-memory" data-t="memory" aria-selected="true">الذاكرة</button>
-    <button role="tab" id="tab-xo" data-t="xo" aria-selected="false">إكس-أو</button>
-    <button role="tab" id="tab-guess" data-t="guess" aria-selected="false">خمّن الرقم</button>
+    <button role="tab" id="tab-memory" data-t="memory" aria-selected="true"><span aria-hidden="true">🧠</span><span>الذاكرة</span></button>
+    <button role="tab" id="tab-xo" data-t="xo" aria-selected="false"><span aria-hidden="true">⭕</span><span>إكس-أو</span></button>
+    <button role="tab" id="tab-guess" data-t="guess" aria-selected="false"><span aria-hidden="true">🎯</span><span>خمّن الرقم</span></button>
   </nav>
 
   <section id="p-memory" role="tabpanel">
     <h2>لعبة الذاكرة</h2>
-    <div class="bar"><span>المحاولات: <b id="m-moves">0</b></span><span>الأزواج: <b id="m-pairs">0</b> / 8</span><span>أفضل نتيجة: <b id="m-best">—</b></span></div>
+    <div class="bar"><span>المحاولات <b id="m-moves">0</b></span><span>الأزواج <b><bdi id="m-pairs">0</bdi> / 8</b></span><span>أفضل نتيجة <b id="m-best">—</b></span></div>
     <div class="memory" id="memory"></div>
     <div class="status" id="m-status">اقلب بطاقتين وابحث عن الحرفين المتطابقين</div>
     <button class="btn" id="m-new">لعبة جديدة</button>
@@ -105,7 +125,7 @@ footer{text-align:center;color:var(--muted);font-size:.85rem}
       <button id="xo-cpu" aria-pressed="true">ضد الكمبيوتر</button>
       <button id="xo-2p" aria-pressed="false">لاعبان</button>
     </div>
-    <div class="bar"><span>X: <b id="s-x">0</b></span><span>تعادل: <b id="s-d">0</b></span><span>O: <b id="s-o">0</b></span></div>
+    <div class="bar"><span>X <b id="s-x">0</b></span><span>تعادل <b id="s-d">0</b></span><span>O <b id="s-o">0</b></span></div>
     <div class="xo" id="xo"></div>
     <div class="status" id="xo-status">دورك يا X</div>
     <button class="btn" id="xo-new">جولة جديدة</button>
@@ -113,9 +133,9 @@ footer{text-align:center;color:var(--muted);font-size:.85rem}
 
   <section id="p-guess" role="tabpanel" hidden>
     <h2>خمّن الرقم</h2>
-    <p style="margin:0;color:var(--muted)">اخترت رقمًا بين ١ و١٠٠. لديك ٧ محاولات.</p>
+    <p class="lead">اخترت رقمًا بين ١ و١٠٠. لديك ٧ محاولات.</p>
     <div class="range" aria-hidden="true"><i id="g-range"></i></div>
-    <div class="bar"><span>المجال: <b id="g-lo">1</b> – <b id="g-hi">100</b></span><span>المتبقي: <b id="g-left">7</b></span></div>
+    <div class="bar"><span>المجال <b><bdi id="g-lo">1</bdi> – <bdi id="g-hi">100</bdi></b></span><span>المتبقي <b id="g-left">7</b></span></div>
     <form class="guess-row" id="g-form">
       <input id="g-input" type="number" min="1" max="100" inputmode="numeric" placeholder="اكتب رقمًا" aria-label="تخمينك">
       <button class="btn" type="submit">خمّن</button>
@@ -124,8 +144,12 @@ footer{text-align:center;color:var(--muted);font-size:.85rem}
     <ul class="hist" id="g-hist"></ul>
     <button class="btn ghost" id="g-new">رقم جديد</button>
   </section>
+  </main>
 
-  <footer>صُنعت بـ HTML وCSS وJavaScript، بدون أي خادم</footer>
+  <footer>
+    <div class="credit">تطوير <span>م. مروان محمد الخضري</span></div>
+    <small>صُنعت بـ HTML وCSS وJavaScript، بدون أي خادم</small>
+  </footer>
 </div>
 
 <script>
